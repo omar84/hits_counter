@@ -6,37 +6,72 @@ TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
+clone this repo to your Rails App's root directory
+
+`git clone https://github.com/omar84/hits_counter.git`
+
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'hits_counter'
+gem "hits_counter", :path => "hits_counter"
 ```
-
-And then execute:
+run the following:
 
     $ bundle
+    $ bundle exec rails generate hits_counter:install
+    $ bundle exec rake db:migrate
 
-Or install it yourself as:
+edit `config/initializers/hits_counter.rb` and change its config values to fit your needs
 
-    $ gem install hits_counter
+add the following lines to `app/controllers/application_controller.rb`:
+```ruby
+  before_action :examine_url
+
+  helper_method :hc_logged_in?
+
+  def hc_logged_in?
+    not session[:hc_username].blank?
+  end
+
+  private
+
+  def examine_url
+    require 'hits_counter'
+
+    HitsCounter.match_url(request.original_fullpath)
+  end
+```
+
+if you have a catch-all route defined at the end of your `config/routes.rb`, insert these routes in the line before:
+```ruby
+  match 'hits_login' => 'hits_counter/hc_sessions#login', :via => [:post]
+  match 'hits_logout' => 'hits_counter/hc_sessions#logout', :via => [:get]
+  match 'hits_report' => 'hits_counter/hc_matching_hits#index', :via => [:get]
+```
+
+```ruby
+### catch-all route example:
+  match '*path' => 'welcome#index', via: [:get]
+```
+
+restart your app
+
 
 ## Usage
 
-TODO: Write usage instructions here
+visit some URLs that match your config rules, and some that don't, to populate the database with some data
 
-## Development
+go to `http://YOUR-APP-URL/hits_report`
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+enter login information matching the username/password in the initializer config file that you changed earlier
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+you will get access to the summary of the hits counter, as well as be able to export it to csv.
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/hits_counter. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
 
 ## Code of Conduct
 
