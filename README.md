@@ -2,6 +2,8 @@
 
 This is a simple Rails Gem that counts visits per day to certain URLs that you can define in the Gem's config file.
 
+tested with Ruby 2.3.4, Rails 5.1
+
 
 ## Installation
 
