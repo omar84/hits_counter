@@ -1,0 +1,13 @@
+# This migration creates the `url_hits` table, the only schema PT requires.
+class CreateHcMatchingHitsTable < ActiveRecord::Migration<%= migration_version %>
+
+  def change
+    create_table :hc_matching_hits<%= table_options %> do |t|
+      t.string   :url
+      t.string   :match_to, null: false
+
+      t.datetime :created_at
+    end
+    add_index :hc_matching_hits, :match_to, :name => 'hc_match_to_index'
+  end
+end

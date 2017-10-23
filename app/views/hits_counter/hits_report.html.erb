@@ -1,0 +1,18 @@
+<h3><%= 'Hits Report' %></h3>
+
+<table border="1" cellpadding="4" cellspacing="1">
+  <% @hits.each_with_index do |d, i| %>
+    <tr>
+    <% if i == 0 %>
+      <th><%= d[0] %></th> <th><%= d[1] %></th> <th><%= d[2] %></th>
+    <% else %>
+      <td>'<%= d[0] %>'</td> <td><%= d[1] %></td> <td><%= d[2] %></td>
+    <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<p>
+<%= link_to "Download CSV", {:controller => "hits_counter/hc_matching_hits", :action => :index, :format => "csv"} %> | 
+<%= link_to "Log out", {:controller => "hits_counter/hc_sessions", :action => :logout} %>
+</p>

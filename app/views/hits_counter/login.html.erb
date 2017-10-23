@@ -1,0 +1,21 @@
+<h3><%= 'Login' %></h3>
+
+<% flash.each do |k, v| %>
+  <div style="color: red"><%= v %></div>
+<% end %>
+<p>Please enter your username/password:</p>
+
+<%= form_tag 'hits_login', :method => :post do %>
+  <div class="field">
+    <%= label_tag :username %><br />
+    <%= text_field_tag :username %>
+  </div><br />
+  <div class="field">
+    <%= label_tag :password %><br />
+    <%= password_field_tag :password %>
+  </div><br />
+  <div class="actions">
+    <%= submit_tag "Login" %>
+  </div>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+<% end %>
